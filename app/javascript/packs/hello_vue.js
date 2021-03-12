@@ -7,10 +7,15 @@
 
 import Vue from 'vue'
 import App from '../app.vue'
+import VueRouter from 'vue-router';
+import router from '../router';
+
+Vue.use(VueRouter);
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({
-    render: h => h(App)
+    render: h => h(App),
+    router,
   }).$mount()
   document.body.appendChild(app.$el)
 
