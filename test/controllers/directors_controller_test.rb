@@ -1,9 +1,9 @@
 require 'test_helper'
 
 class DirectorsControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get directors_index_url
-    assert_response :success
+  test "should get all directors" do
+    get directors_url
+    assert_equal Director.all.to_json, @response.body
   end
 
 end

@@ -6,6 +6,7 @@ one:
   synopsis: MyText
   director: one
   rating: 1
+  url: http://test.url/image0.png
 
 two:
   title: MyString
@@ -13,3 +14,4 @@ two:
   synopsis: MyText
   director: two
   rating: 1
+  url: http://test.url/image1.png
