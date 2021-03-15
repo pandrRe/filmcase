@@ -1,24 +1,24 @@
-# README
+# Filmcase
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Film collection tracker made with Ruby on Rails.
 
-Things you may want to cover:
+## Setup
+```bash
+git clone https://github.com/pandrRe/filmcase.git
+cd filmcase
+bundle install
+yarn install
+bin/rails db:setup
+```
 
-* Ruby version
+## Running
+```bash
+bin/rails server & bin/webpack-dev-server
+```
+Open on localhost:3000.
 
-* System dependencies
+## Testing
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```bash
+bin/rails test
+```
