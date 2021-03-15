@@ -28,4 +28,31 @@ class FilmsControllerTest < ActionDispatch::IntegrationTest
     assert_equal film.to_json, @response.body
   end
 
+  test "should update film" do
+    film = films(:one)
+    @body = {
+      film: {
+        title: "Updated Title",
+        year: film.year,
+        synopsis: film.synopsis,
+        director_id: film.director_id,
+        rating: film.rating,
+        url: film.url
+      }
+    }
+    put film_url(film.id), params: @body, as: :json, xhr: true
+    assert_equal JSON[@response.body]['title'], "Updated Title"
+
+    film = Film.find(film.id)
+    assert_equal film.title, "Updated Title"
+  end
+
+  test "should delete film" do
+    film = films(:two)
+    delete film_url(film.id), xhr: true
+    assert_equal JSON[@response.body]['id'], film.id
+
+    assert !Film.where(:id => film.id).exists?
+  end
+
 end

@@ -1,19 +1,12 @@
 <template>
 <section class="flex justify-center pt-6">
   <section v-if="film" class="flex space-x-4 align-center">
-    <div class="flex flex-col">
-      <img class="w-60 h-80" :src="film.url">
-      <small v-if="selectedDirector" class="text-center text-gray-50">Directed by
-        <router-link class="text-blue-400 hover:text-blue-600" :to="{ name: 'index', query: { director_id: selectedDirector.id }}">
-          {{ selectedDirector.name }} {{ selectedDirector.surname }}
-        </router-link>
-      </small>
-    </div>
+    <img v-if="film.url" class="w-60 h-80" :src="film.url">
     <div class="my-auto">
-      <div class="p-1 flex space-x-1">
-        <div class="flex-grow">
+      <div class="p-1 flex space-x-1 justify-between">
+        <div>
           <label for="filmTitle" class="text-gray-50">Title: </label><br>
-          <input id="filmTitle" type="text" class="w-full" v-model="film.title">
+          <input id="filmTitle" type="text" v-model="film.title">
         </div>
 
         <div>
@@ -51,8 +44,7 @@
       <div class="p-1 w-full">
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="goBack">Back</button>
         <div class="float-right">
-          <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="deleteFilm">Delete</button>
-          <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" @click="submitEdit">Edit</button>
+          <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" @click="submitCreate">Create</button>
         </div>
       </div>
     </div>
@@ -67,51 +59,34 @@ import request from 'superagent';
 export default {
   data: function() {
     return {
-      film: null,
+      film: {
+        title: null,
+        year: null,
+        synopsis: null,
+        rating: null,
+        director_id: null,
+        url: null,
+      },
       directors: [],
     };
   },
   created: function() {
-    request.get(`/api/films/${this.$route.params.id}`)
-      .then(res => this.film = res.body);
     request.get('/api/directors').then(res => this.directors = res.body)
-  },
-  computed: {
-    selectedDirector: function() {
-      return this.directors.find((director) => this.film.director_id === director.id);
-    },
   },
   methods: {
     goBack: function() {
       this.$router.go(-1);
     },
-    submitEdit: function() {
-      request.put(`/api/films/${this.film.id}`)
+    submitCreate: function() {
+      request.post(`/api/films`)
         .set('X-CSRF-Token', this.$CSRF)
         .send({
-          film: {
-            title: this.film.title,
-            year: this.film.year,
-            synopsis: this.film.synopsis,
-            director_id: this.film.director_id,
-            rating: this.film.rating,
-            url: this.film.url,
-          }
+          film: this.film
         })
-        .then(_ => {
-          alert('Film updated in database.');
+        .then(res => {
+          alert(`Film #${res.body.id} added to database.`);
           this.$router.push("/");
         });
-    },
-    deleteFilm: function() {
-      if (confirm(`Are you sure you want to delete ${this.film.title}?`)) {
-        request.delete(`/api/films/${this.film.id}`)
-          .set('X-CSRF-Token', this.$CSRF)
-          .then(res => {
-            alert(`Deleted film #${res.body.id}.`);
-            this.$router.push("/");
-          });
-      }
     }
   }
 };

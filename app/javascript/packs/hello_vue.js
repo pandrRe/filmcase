@@ -11,6 +11,7 @@ import VueRouter from 'vue-router';
 import router from '../router';
 
 Vue.use(VueRouter);
+Vue.prototype.$CSRF = document.getElementsByName("csrf-token")[0].getAttribute('content');
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({
@@ -18,8 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     router,
   }).$mount()
   document.body.appendChild(app.$el)
-
-  console.log(app)
 })
 
 
